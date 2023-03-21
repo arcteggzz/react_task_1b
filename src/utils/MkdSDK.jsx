@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default function MkdSDK() {
   this._baseurl = "https://reacttask.mkdlabs.com";
   this._project_id = "reacttask";
@@ -15,12 +17,65 @@ export default function MkdSDK() {
 
   this.login = async function (email, password, role) {
     //TODO
+    // console.log(this._baseUrl);
+    console.log(email, password, role);
+    const url = `https://reacttask.mkdlabs.com/v2/api/lambda/login`;
+    const options = {
+      headers: {
+        "content-type": "text/json",
+        "x-project":
+          "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw",
+      },
+    };
+    // const data = JSON.stringify({
+    //   email,
+    //   password,
+    //   role,
+    // });
+    // axios
+    //   .post(url, data, options)
+    //   .then((response) => {
+    //     console.log(response);
+    //     return response;
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //     return error;
+    //   });
+
+    // const results = await fetch(
+    //   "https://reacttask.mkdlabs.com/v2/api/lambda/login",
+    //   {
+    //     method: "POST",
+    //     headers: {
+    //       "content-type": "application/json",
+    //       "x-project":
+    //         "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw",
+    //     },
+    //     body: data,
+    //   }
+    // );
+    // return results;
+
+    const loginURL = "https://reacttask.mkdlabs.com/v2/api/lambda/login";
+    const data = { email, password, role };
+    const requestObj = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-project":
+          "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw==",
+      },
+      body: JSON.stringify(data),
+    };
+    const res = await fetch(loginURL, requestObj);
+    return await res.json();
   };
 
   this.getHeader = function () {
     return {
       Authorization: "Bearer " + localStorage.getItem("token"),
-      "x-project": base64Encode,
+      "x-project": "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw",
     };
   };
 
@@ -31,7 +86,8 @@ export default function MkdSDK() {
   this.callRestAPI = async function (payload, method) {
     const header = {
       "Content-Type": "application/json",
-      "x-project": base64Encode,
+      "x-project":
+        "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw==",
       Authorization: "Bearer " + localStorage.getItem("token"),
     };
 
@@ -64,7 +120,7 @@ export default function MkdSDK() {
           payload.limit = 10;
         }
         const paginateResult = await fetch(
-          this._baseurl + `/v1/api/rest/${this._table}/${method}`,
+          this._baseurl + `/v1/api/rest/video/${method}`,
           {
             method: "post",
             headers: header,
@@ -88,6 +144,20 @@ export default function MkdSDK() {
 
   this.check = async function (role) {
     //TODO
+    const checkUrl = "https://reacttask.mkdlabs.com/v2/api/lambda/check";
+    const data = { role };
+    const requestObj = {
+      method: "post",
+      headers: {
+        "Content-Type": "application/json",
+        "x-project":
+          "cmVhY3R0YXNrOmQ5aGVkeWN5djZwN3p3OHhpMzR0OWJtdHNqc2lneTV0Nw==",
+        Authorization: "Bearer " + localStorage.getItem("token"),
+      },
+      body: JSON.stringify(data),
+    };
+    const res = await fetch(checkUrl, requestObj);
+    return await res.json();
   };
 
   return this;
